@@ -1,12 +1,10 @@
 name: CI/CD Pipeline for Blood Bank System
 
-# This workflow runs on any push to the 'main' branch
 on:
   push:
     branches: [ "main" ]
 
 jobs:
-  # Job to build and push the backend Docker image
   build-backend:
     runs-on: ubuntu-latest
     steps:
@@ -23,11 +21,10 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./backend
-          dockerfile: ./backend/Dockerfile.backend
+          file: ./backend/Dockerfile.backend # <-- CORRECTED
           push: true
           tags: ajitpatra/blood-bank-backend:latest # <-- REPLACE with your Docker Hub username
 
-  # Job to build and push the frontend Docker image
   build-frontend:
     runs-on: ubuntu-latest
     steps:
@@ -44,13 +41,11 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./frontend
-          dockerfile: ./frontend/Dockerfile.frontend
+          file: ./frontend/Dockerfile.frontend # <-- CORRECTED
           push: true
           tags: ajitpatra/blood-bank-frontend:latest # <-- REPLACE with your Docker Hub username
 
-  # Job to deploy the application to the AWS EC2 instance
   deploy:
-    # This job depends on the build jobs finishing successfully
     needs: [build-backend, build-frontend]
     runs-on: ubuntu-latest
     
@@ -62,7 +57,6 @@ jobs:
           username: ${{ secrets.AWS_USERNAME }}
           key: ${{ secrets.AWS_SSH_PRIVATE_KEY }}
           script: |
-            # Create a new docker-compose file for production
             echo "services:
               db:
                 image: mysql:8.0
@@ -99,11 +93,6 @@ jobs:
             volumes:
               mysql_data: {}" > docker-compose-prod.yml
 
-            # Pull the latest images from Docker Hub
             docker-compose -f docker-compose-prod.yml pull
-            
-            # Stop the old containers and start the new ones
             docker-compose -f docker-compose-prod.yml up -d
-            
-            # Remove any old, unused Docker images to save space
             docker image prune -af
