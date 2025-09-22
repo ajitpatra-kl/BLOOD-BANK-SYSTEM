@@ -5,7 +5,6 @@ on:
     branches: [ "main" ]
 
 jobs:
-  # Job to build and push the backend Docker image
   build-backend:
     runs-on: ubuntu-latest
     steps:
@@ -21,15 +20,14 @@ jobs:
       - name: Build and push backend image
         uses: docker/build-push-action@v5
         with:
-          context: ./backend
-          file: ./backend/Dockerfile.backend
+          context: ./BACKEND  # <-- CORRECTED CASE
+          file: ./BACKEND/Dockerfile.backend # <-- CORRECTED CASE
           push: true
           tags: ajitpatra/blood-bank-backend:latest
 
-  # Job to build and push the frontend Docker image
-  build-frontend: # <-- CORRECTED INDENTATION
-    runs-on: ubuntu-latest # <-- CORRECTED INDENTATION
-    steps: # <-- CORRECTED INDENTATION
+  build-frontend:
+    runs-on: ubuntu-latest
+    steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -42,12 +40,11 @@ jobs:
       - name: Build and push frontend image
         uses: docker/build-push-action@v5
         with:
-          context: ./frontend
-          file: ./frontend/Dockerfile.frontend
+          context: ./FRONTEND # <-- CORRECTED CASE
+          file: ./FRONTEND/Dockerfile.frontend # <-- CORRECTED CASE
           push: true
           tags: ajitpatra/blood-bank-frontend:latest
 
-  # Job to deploy the application to the AWS EC2 instance
   deploy:
     needs: [build-backend, build-frontend]
     runs-on: ubuntu-latest
