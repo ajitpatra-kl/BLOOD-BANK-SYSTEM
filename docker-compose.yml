@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  # Database Service (MySQL)
+  db:
+    image: mysql:8.0
+    container_name: bloodbank-db
+    environment:
+      MYSQL_ROOT_PASSWORD: Ajit@2003
+      MYSQL_DATABASE: bloodbank
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: unless-stopped
+
+  # Backend Service (Spring Boot)
+  backend:
+    build:
+      context: ./BACKEND  # CORRECTED: Use proper folder name
+      dockerfile: Dockerfile.backend
+    container_name: bloodbank-backend
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/bloodbank?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: Ajit@2003
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SERVER_PORT: 8080
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+  # Frontend Service (React + Nginx)
+  frontend:
+    build:
+      context: ./FRONTEND # CORRECTED: Use proper folder name
+      dockerfile: Dockerfile.frontend
+    container_name: bloodbank-frontend
+    depends_on:
+      - backend
+    environment:
+      - VITE_API_BASE_URL=http://backend:8080/api
+    ports:
+      - "80:80"
+    restart: unless-stopped
+
+volumes:
+  mysql_data: {}

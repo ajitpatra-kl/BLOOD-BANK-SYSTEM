@@ -1,0 +1,394 @@
+/* Blood Bank Management System Styles */
+
+/* CSS Reset for full width */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* Global Styles */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Full width container */
+.container-fluid {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin: 0;
+}
+
+.container {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+/* Header Styles */
+.navbar-brand {
+  font-weight: bold;
+  color: #dc3545 !important;
+}
+
+.navbar-nav .nav-link {
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #dc3545 !important;
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  padding: 2rem 0;
+  width: 100%;
+}
+
+main {
+  width: 100%;
+  flex-grow: 1;
+}
+
+/* App container */
+.App {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Bootstrap Container Overrides */
+.container-fluid {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding-left: 15px !important;
+  padding-right: 15px !important;
+  margin: 0 !important;
+}
+
+/* Card Enhancements */
+.card {
+  border: none;
+  border-radius: 8px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+}
+
+.card-header {
+  border-bottom: 1px solid #eee;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+/* Stats Cards */
+.stats-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  text-align: center;
+  padding: 1.5rem;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.stats-card:hover {
+  transform: scale(1.05);
+}
+
+.stats-card h3 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 0.5rem 0;
+}
+
+/* Blood Group Badges */
+.blood-group-badge {
+  font-size: 1.1rem;
+  padding: 0.5rem 0.8rem;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+/* Status Badges */
+.status-pending {
+  background-color: #ffc107;
+  color: #000;
+}
+
+.status-approved {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.status-rejected {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.status-fulfilled {
+  background-color: #17a2b8;
+  color: #fff;
+}
+
+.status-cancelled {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+/* Urgency Badges */
+.urgency-normal {
+  background-color: #28a745;
+}
+
+.urgency-urgent {
+  background-color: #ffc107;
+  color: #000;
+}
+
+.urgency-emergency {
+  background-color: #dc3545;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Form Enhancements */
+.form-control, .form-select {
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.form-label {
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 0.5rem;
+}
+
+/* Button Enhancements */
+.btn {
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  border: none;
+}
+
+.btn-danger:hover {
+  background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
+  transform: translateY(-1px);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  border: none;
+}
+
+.btn-warning {
+  background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+  border: none;
+  color: #000;
+}
+
+/* Table Enhancements */
+.table-responsive {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table thead th {
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+  font-weight: 600;
+  color: #495057;
+}
+
+.table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* Progress Bars */
+.progress {
+  height: 8px;
+  border-radius: 4px;
+}
+
+.progress-bar {
+  border-radius: 4px;
+}
+
+/* Stock Level Indicators */
+.stock-good {
+  color: #28a745;
+}
+
+.stock-low {
+  color: #ffc107;
+}
+
+.stock-critical {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+/* Hero Section */
+.hero-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 3rem 0;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  width: 100%;
+}
+
+.hero-section h1 {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.hero-section p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+/* Ensure full width for Bootstrap components */
+.row {
+  width: 100%;
+  margin: 0;
+}
+
+.col, .col-*, [class*="col-"] {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/* Footer Styles */
+.footer {
+  background-color: #343a40;
+  color: white;
+  padding: 2rem 0;
+  margin-top: auto;
+}
+
+.footer h6 {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.footer a {
+  color: #adb5bd;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer a:hover {
+  color: #dc3545;
+}
+
+/* Emergency Banner */
+.emergency-banner {
+  background: linear-gradient(45deg, #dc3545, #ff6b6b);
+  color: white;
+  padding: 0.5rem;
+  text-align: center;
+  font-weight: bold;
+  animation: pulse 2s infinite;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero-section h1 {
+    font-size: 2rem;
+  }
+  
+  .stats-card {
+    margin-bottom: 1rem;
+  }
+  
+  .table-responsive {
+    font-size: 0.9rem;
+  }
+}
+
+/* Loading Spinner */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255,0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* Utility Classes */
+.text-blood {
+  color: #dc3545 !important;
+}
+
+.bg-blood {
+  background-color: #dc3545 !important;
+}
+
+.border-blood {
+  border-color: #dc3545 !important;
+}
+
+.shadow-custom {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #dc3545;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #c82333;
+}

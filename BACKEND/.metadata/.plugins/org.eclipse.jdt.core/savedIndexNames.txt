@@ -1,0 +1,2 @@
+INDEX VERSION 1.134+D:\2025-2026-ODD-SEM\CICD\BLOOD-BANK-SYSTEM\BACKEND\.metadata\.plugins\org.eclipse.jdt.core
+1865797976.index
