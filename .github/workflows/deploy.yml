@@ -5,6 +5,7 @@ on:
     branches: [ "main" ]
 
 jobs:
+  # Job to build and push the backend Docker image
   build-backend:
     runs-on: ubuntu-latest
     steps:
@@ -21,13 +22,14 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./backend
-          file: ./backend/Dockerfile.backend # <-- CORRECTED
+          file: ./backend/Dockerfile.backend
           push: true
-          tags: ajitpatra/blood-bank-backend:latest # <-- REPLACE with your Docker Hub username
+          tags: ajitpatra/blood-bank-backend:latest
 
-  build-frontend:
-    runs-on: ubuntu-latest
-    steps:
+  # Job to build and push the frontend Docker image
+  build-frontend: # <-- CORRECTED INDENTATION
+    runs-on: ubuntu-latest # <-- CORRECTED INDENTATION
+    steps: # <-- CORRECTED INDENTATION
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -41,10 +43,11 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./frontend
-          file: ./frontend/Dockerfile.frontend # <-- CORRECTED
+          file: ./frontend/Dockerfile.frontend
           push: true
-          tags: ajitpatra/blood-bank-frontend:latest # <-- REPLACE with your Docker Hub username
+          tags: ajitpatra/blood-bank-frontend:latest
 
+  # Job to deploy the application to the AWS EC2 instance
   deploy:
     needs: [build-backend, build-frontend]
     runs-on: ubuntu-latest
@@ -69,7 +72,7 @@ jobs:
                 restart: unless-stopped
 
               backend:
-                image: ajitpatra/blood-bank-backend:latest # <-- REPLACE with your Docker Hub username
+                image: ajitpatra/blood-bank-backend:latest
                 container_name: bloodbank-backend
                 depends_on:
                   - db
@@ -82,7 +85,7 @@ jobs:
                 restart: unless-stopped
 
               frontend:
-                image: ajitpatra/blood-bank-frontend:latest # <-- REPLACE with your Docker Hub username
+                image: ajitpatra/blood-bank-frontend:latest
                 container_name: bloodbank-frontend
                 ports:
                   - '80:80'
