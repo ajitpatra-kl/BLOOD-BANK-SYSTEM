@@ -1,0 +1,109 @@
+name: CI/CD Pipeline for Blood Bank System
+
+# This workflow runs on any push to the 'main' branch
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  # Job to build and push the backend Docker image
+  build-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push backend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          dockerfile: ./backend/Dockerfile.backend
+          push: true
+          tags: ajitpatra/blood-bank-backend:latest # <-- REPLACE with your Docker Hub username
+
+  # Job to build and push the frontend Docker image
+  build-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push frontend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          dockerfile: ./frontend/Dockerfile.frontend
+          push: true
+          tags: ajitpatra/blood-bank-frontend:latest # <-- REPLACE with your Docker Hub username
+
+  # Job to deploy the application to the AWS EC2 instance
+  deploy:
+    # This job depends on the build jobs finishing successfully
+    needs: [build-backend, build-frontend]
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USERNAME }}
+          key: ${{ secrets.AWS_SSH_PRIVATE_KEY }}
+          script: |
+            # Create a new docker-compose file for production
+            echo "services:
+              db:
+                image: mysql:8.0
+                container_name: bloodbank-db
+                environment:
+                  MYSQL_ROOT_PASSWORD: Ajit@2003
+                  MYSQL_DATABASE: bloodbank
+                volumes:
+                  - mysql_data:/var/lib/mysql
+                restart: unless-stopped
+
+              backend:
+                image: ajitpatra/blood-bank-backend:latest # <-- REPLACE with your Docker Hub username
+                container_name: bloodbank-backend
+                depends_on:
+                  - db
+                environment:
+                  SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/bloodbank?useSSL=false&allowPublicKeyRetrieval=true
+                  SPRING_DATASOURCE_USERNAME: root
+                  SPRING_DATASOURCE_PASSWORD: Ajit@2003
+                  SPRING_JPA_HIBERNATE_DDL_AUTO: update
+                  SERVER_PORT: 8080
+                restart: unless-stopped
+
+              frontend:
+                image: ajitpatra/blood-bank-frontend:latest # <-- REPLACE with your Docker Hub username
+                container_name: bloodbank-frontend
+                ports:
+                  - '80:80'
+                depends_on:
+                  - backend
+                restart: unless-stopped
+
+            volumes:
+              mysql_data: {}" > docker-compose-prod.yml
+
+            # Pull the latest images from Docker Hub
+            docker-compose -f docker-compose-prod.yml pull
+            
+            # Stop the old containers and start the new ones
+            docker-compose -f docker-compose-prod.yml up -d
+            
+            # Remove any old, unused Docker images to save space
+            docker image prune -af
